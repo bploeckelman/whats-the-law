@@ -1,0 +1,3 @@
+[submodule "api.congress.gov"]
+	path = api.congress.gov
+	url = git@github.com:bploeckelman/api.congress.gov.git
