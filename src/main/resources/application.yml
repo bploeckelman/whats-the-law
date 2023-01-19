@@ -6,3 +6,8 @@ server:
 logging:
   level:
     org.whatsthelaw.whatsthelaw: "debug"
+
+spring:
+  data:
+    mongodb:
+      uri: "mongodb://root:root@localhost:27017/doc?authSource=admin"

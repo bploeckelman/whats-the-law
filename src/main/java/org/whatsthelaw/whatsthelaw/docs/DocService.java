@@ -4,6 +4,7 @@ import com.github.difflib.text.DiffRow;
 import com.github.difflib.text.DiffRowGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -21,6 +22,14 @@ public class DocService {
 
     private final DiffRowGenerator diffInline;
     private final DiffRowGenerator diffSideBySide;
+    private final MongoTemplate mongoTemplate;
+
+    public Doc put(int congress, int bill, int version) {
+        var doc = new Doc();
+        var body = get(congress, bill, version);
+        doc.set(congress, bill, version, body);
+        return mongoTemplate.save(doc);
+    }
 
     public String get(int congress, int bill, int version) throws DocNotFoundException {
         var cwd = Paths.get("").toAbsolutePath().toString();

@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  doc-db:
+    image: mongo
+    restart: unless-stopped
+    volumes:
+      - doc-db-data:/data/db
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+
+  doc-db-admin:
+    image: mongo-express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_MONGODB_URL: mongodb://root:root@doc-db:27017/
+
+volumes:
+  doc-db-data:
