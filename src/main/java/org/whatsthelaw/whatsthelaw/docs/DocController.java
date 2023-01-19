@@ -19,4 +19,14 @@ public class DocController {
             return docs.get(congress, bill, version);
     }
 
+    @GetMapping({"/compare", "/compare/inline"})
+    public String compareDocs(@RequestParam int congress, @RequestParam int bill, @RequestParam int v1, @RequestParam int v2) {
+        return docs.compareInline(congress, bill, v1, v2);
+    }
+
+    @GetMapping("/compare/sidebyside")
+    public String compareDocsSideBySide(@RequestParam int congress, @RequestParam int bill, @RequestParam int v1, @RequestParam int v2) {
+        return docs.compareSideBySide(congress, bill, v1, v2);
+    }
+
 }
