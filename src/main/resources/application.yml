@@ -11,3 +11,8 @@ spring:
   data:
     mongodb:
       uri: "mongodb://root:root@localhost:27017/doc?authSource=admin"
+
+app:
+  congress-api:
+    root-uri: ${CONGRESS_API_ROOT_URI}
+    key: ${CONGRESS_API_KEY}
