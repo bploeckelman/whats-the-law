@@ -2,11 +2,16 @@ package org.whatsthelaw.whatsthelaw.bills;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
+import org.whatsthelaw.whatsthelaw.config.AppProperties;
 import org.whatsthelaw.whatsthelaw.data.ApiResponses;
 
 @RestController
@@ -15,11 +20,25 @@ import org.whatsthelaw.whatsthelaw.data.ApiResponses;
 public class BillsController {
 
     private final RestTemplate http;
+    private final AppProperties app;
 
     @GetMapping
     @Cacheable("bills")
-    public ResponseEntity<Bill[]> basePath() {
-        var responseBody = http.getForObject("/bill", ApiResponses.BillResponse.class);
+    public ResponseEntity<Bill[]> basePath(@RequestParam(required = false) Integer congress,
+                                           @RequestParam(required = false) Bill.Type type) {
+        var root = app.getCongressApi().rootUri();
+        var path = "/bill";
+        var urlTemplate = UriComponentsBuilder.fromHttpUrl(root + path);
+        if (congress != null) {
+            urlTemplate.pathSegment(String.valueOf(congress));
+            if (type != null) {
+                urlTemplate.pathSegment(type.name());
+            }
+        }
+        var url = urlTemplate.encode().toUriString();
+
+        var response = http.exchange(url, HttpMethod.GET, null, ApiResponses.BillResponse.class);
+        var responseBody = response.getBody();
         if (responseBody == null) {
             return ResponseEntity.internalServerError().build();
         }

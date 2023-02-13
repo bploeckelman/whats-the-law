@@ -10,6 +10,8 @@ import java.time.ZonedDateTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Bill {
 
+    public enum Type { HR, SR }
+
     public record Action(LocalDate actionDate, String text) {}
 
     private int congress;

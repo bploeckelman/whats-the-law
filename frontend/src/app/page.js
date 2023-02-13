@@ -174,19 +174,25 @@ async function Bills() {
 
 async function SimpleBill({ bill }) {
   return (
-    <figure className='flex rounded-lg shadow-lg mb-8 bg-slate-600'>
+    <figure className='flex rounded-l-none rounded-r-full shadow-lg mb-8'>
 
-      <div className='flex w-1/6 h-auto mr-4
-        rounded-l-lg rounded-r-none
+      <div className='flex w-1/6 h-auto
+        rounded-l-none rounded-r-none
         bg-gradient-to-l from-slate-600 to-slate-800
         align-middle'
       >
-        <div className='flex flex-col justify-center items-center text-4xl font-bold text-gray-400 m-auto'>
-          {bill.originChamberCode + '.' + bill.number}
+        <div className='flex flex-col justify-center items-center text-4xl text-blue-400 m-auto'>
+          <p className='text-3xl font-bold'>
+            {bill.type + '.' + bill.number}
+          </p>
+          <span className='text-gray-500 font-extrabold font-serif'>
+            {bill.congress}
+          </span>
         </div>
       </div>
 
-      <div className='w-5/6 p-8
+      <div className='w-5/6 pl-0 pr-16 py-5 mr-10
+        rounded-l-null rounded-r-full
         bg-gradient-to-r from-slate-600 to-slate-800'
       >
         <blockquote className='mb-4'>
@@ -209,7 +215,8 @@ async function Bill({ bill }) {
     <div className={'w-1/2 flex flex-row'}>
       {/* Handle */}
       <div className={'h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden'}>
-        <h1>{bill.originChamberCode + '.' + bill.number}</h1>
+        <h1>{bill.congress}</h1>
+        <h2>{bill.originChamberCode + '.' + bill.number}</h2>
       </div>
 
       {/* Content */}
