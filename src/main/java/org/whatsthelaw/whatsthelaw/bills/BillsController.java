@@ -19,14 +19,14 @@ import org.whatsthelaw.whatsthelaw.data.ApiResponses;
 public class BillsController {
 
     private final RestTemplate http;
-    private final AppProperties app;
+    private final AppProperties props;
 
     @GetMapping
     @Cacheable("bills")
     public ResponseEntity<Bill[]> bills(@RequestParam(required = false) Integer congress,
                                         @RequestParam(required = false) Bill.Type type,
                                         @RequestParam(required = false) Integer number) {
-        var root = app.getCongressApi().rootUri();
+        var root = props.getCongressApi().rootUri();
         var path = "/bill";
         var urlTemplate = UriComponentsBuilder.fromHttpUrl(root + path);
         if (congress != null) {
@@ -38,12 +38,11 @@ public class BillsController {
                 }
             }
         }
-        var url = urlTemplate.encode().toUriString();
 
+        var url = urlTemplate.encode().toUriString();
         var response = (number == null)
                 ? http.exchange(url, HttpMethod.GET, null, ApiResponses.BillsResponse.class)
-                : http.exchange(url, HttpMethod.GET, null, ApiResponses.BillResponse.class)
-                ;
+                : http.exchange(url, HttpMethod.GET, null, ApiResponses.BillResponse.class);
         var responseBody = response.getBody();
         if (responseBody == null) {
             return ResponseEntity.internalServerError().build();
