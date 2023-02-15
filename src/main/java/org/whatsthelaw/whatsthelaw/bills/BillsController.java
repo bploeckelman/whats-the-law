@@ -47,12 +47,12 @@ public class BillsController {
         var responseBody = response.getBody();
         if (responseBody == null) {
             return ResponseEntity.internalServerError().build();
-        } else if (responseBody instanceof ApiResponses.BillsResponse body) {
-            return ResponseEntity.ok(body.bills());
-        } else if (responseBody instanceof ApiResponses.BillResponse body) {
-            return ResponseEntity.ok(new Bill[] {body.bill()});
         } else {
-            return ResponseEntity.notFound().build();
+            return switch (responseBody) {
+                case ApiResponses.BillsResponse body -> ResponseEntity.ok(body.bills());
+                case ApiResponses.BillResponse body -> ResponseEntity.ok(new Bill[]{ body.bill() });
+                default -> ResponseEntity.notFound().build();
+            };
         }
     }
 
